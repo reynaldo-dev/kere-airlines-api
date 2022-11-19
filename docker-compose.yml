@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  app:
+    image: 'kere-api'
+    container_name: 'kere-api'
+    ports:
+      - '4000:4000'
+    environment:
+    - PORT=4000
+    - POSTGRES_PASSWORD=5bPFasozavkUq3Y0uqOc
+    - POSTGRES_USER=postgres
+    - POSTGRES_DB=railway
+    - POSTGRES_HOST=containers-us-west-105.railway.app
+    - POSTGRES_PORT=6661
+    - DATABASE_URL=postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public
+    - JWT_SECRET=secret

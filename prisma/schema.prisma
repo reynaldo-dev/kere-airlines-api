@@ -1,0 +1,55 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model client {
+  id_client Int      @id @default(autoincrement())
+  name      String?  @db.VarChar(255)
+  lastname  String?  @db.VarChar(255)
+  dir       String?  @db.VarChar(255)
+  dui       String?  @db.VarChar(255)
+  id_gender Int?
+  email     String?  @unique @db.VarChar(255)
+  id_user   Int?
+  gender    gender?  @relation(fields: [id_gender], references: [id_gender], onDelete: NoAction, onUpdate: NoAction, map: "fk_customer_1")
+  userr     userr?   @relation(fields: [id_user], references: [id_user], onDelete: NoAction, onUpdate: NoAction, map: "fk_user1")
+  ticket    ticket[]
+}
+
+model gender {
+  id_gender Int      @id @default(autoincrement())
+  gender    String?  @db.VarChar(255)
+  client    client[]
+}
+
+model role {
+  id_role Int     @id @default(autoincrement())
+  role    String  @unique @db.VarChar(255)
+  userr   userr[]
+}
+
+model userr {
+  id_user  Int      @id @default(autoincrement())
+  id_role  Int?
+  username String?  @db.VarChar(255)
+  email    String   @unique @db.VarChar(255)
+  password String?  @db.VarChar(255)
+  role     role?    @relation(fields: [id_role], references: [id_role], onDelete: NoAction, onUpdate: NoAction, map: "fk_role_1")
+  client   client[]
+}
+
+model ticket {
+  id_ticket   Int       @id @default(autoincrement())
+  id_client   Int?
+  fromdate    String    @default(dbgenerated("CURRENT_DATE")) @db.VarChar
+  todate      String    @default(dbgenerated("CURRENT_DATE")) @db.VarChar
+  destination String?   @db.VarChar(255)
+  motive      String?   @db.VarChar(255)
+  createdat   DateTime? @default(dbgenerated("CURRENT_DATE")) @db.Date
+  client      client?   @relation(fields: [id_client], references: [id_client], onDelete: NoAction, onUpdate: NoAction, map: "fk_ticket")
+}
